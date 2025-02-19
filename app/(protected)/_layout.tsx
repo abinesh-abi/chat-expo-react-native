@@ -1,16 +1,29 @@
-import { Tabs } from 'expo-router';
+import { router, Stack, Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Button, Platform, Text, View } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import * as SecureStore from 'expo-secure-store';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
+  // React.useEffect(() => {
+  //   checkAuth()
+  // }, [checkAuth]);
+
+  // async function checkAuth() {
+  //   try {
+  //     const token = await SecureStore.getItemAsync('token')
+  //     if (!token) router.push('/login');
+  //   } catch (error) {
+
+  //   }
+  // }
   return (
     <Tabs
       screenOptions={{

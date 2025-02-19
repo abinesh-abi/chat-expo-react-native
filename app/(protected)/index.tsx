@@ -1,11 +1,25 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, Text, Button, View, Pressable } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Link, router } from 'expo-router';
+import React from 'react';
+import * as SecureStore from 'expo-secure-store';
 
 export default function HomeScreen() {
+
+
+  async function logOut() {
+    try {
+      const token = await SecureStore.deleteItemAsync('token')
+      router.push('/login');
+    } catch (error) {
+    }
+  }
+
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -19,6 +33,14 @@ export default function HomeScreen() {
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
+      <View style={{ display: 'flex', gap: 5, justifyContent: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
+        <Link style={{ color: 'white', backgroundColor: 'blue', width: 'auto', padding: 10, borderRadius: 10 }}
+          href='/login'>Link</Link>
+        <Pressable onPress={logOut}>
+          <Text style={{ color: 'white', backgroundColor: 'red', width: 'auto', padding: 10, borderRadius: 10 }}
+          >Logout</Text>
+        </Pressable>
+      </View>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
