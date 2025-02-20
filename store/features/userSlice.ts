@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { LoginBody, User } from "@/types/user";
-import { PostLogin } from "@/api";
-import SecureStore, { setAccessAndRefreshToken } from "@/utils/secureStore";
+import { getUserDetails, PostLogin } from "@/api";
+import SecureStore, {
+  getTokens,
+  removeTokens,
+  setTokens,
+} from "@/utils/secureStore";
 import axios, { Axios, AxiosError } from "axios";
 import { router } from "expo-router";
 
@@ -11,7 +15,7 @@ type InitialStateType = {
 };
 
 const initialState: InitialStateType = {
-  auth: null,
+  auth: getTokens(),
   user: null,
 };
 
@@ -23,12 +27,28 @@ export const userLogin = createAsyncThunk(
     try {
       const response: InitialStateType["auth"] = await PostLogin(body);
       if (response?.access && response.refresh) {
-        const access = await setAccessAndRefreshToken({
+        const access = await setTokens({
           access: response.access,
           refresh: response.refresh,
         });
         return response;
       } else return null;
+    } catch (error) {
+      const err = error as AxiosError;
+      if (err.response?.data) {
+        throw thunkApi.rejectWithValue(err.response.data);
+      }
+      throw thunkApi.rejectWithValue({ message: "Error" });
+    }
+  }
+);
+
+export const userDetails = createAsyncThunk(
+  "/user-details",
+  async (_, thunkApi) => {
+    try {
+      const response: User = await getUserDetails();
+      return response;
     } catch (error) {
       const err = error as AxiosError;
       if (err.response?.data) {
@@ -84,9 +104,9 @@ const userSlice = createSlice({
     },
     // log out user
     logoutUser: (state) => {
-      localStorage.removeItem("authentication");
-      // location.href = '/login';
-      location.href = "/admin";
+      removeTokens().then((data) => {
+        router.push("/login");
+      });
       return { ...state, user: null };
     },
   },
@@ -98,20 +118,13 @@ const userSlice = createSlice({
       .addCase(userLogin.fulfilled, (state, action) => {
         state.auth = action.payload;
         router.push("/");
+      })
+      // .addCase(userLogin.rejected, (state, action) => {
+      //   console.log(action.payload, "ss");
+      // });
+      .addCase(userDetails.fulfilled, (state, action) => {
+        state.user = action.payload;
       });
-    // .addCase(userLogin.rejected, (state, action) => {
-    //   console.log(action.payload, "ss");
-    // });
-    // .addCase(getUserPermission.fulfilled, (state: any, action) => {
-    //   state.status = "succeeded";
-    //   state.permission = action.payload;
-    // })
-    // .addCase(getAccessToken.fulfilled, (state: InitialStateType, action) => {
-    //   state.auth = { access: action.payload.accessToken };
-    // })
-    // .addCase(getProfile.fulfilled, (state: InitialStateType, action) => {
-    //   state.user = action.payload;
-    // });
   },
 });
 

@@ -3,18 +3,20 @@ import React, { useState } from 'react';
 import { Button, Platform, Text, View } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SecureStore from 'expo-secure-store';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { userDetails } from '@/store/features/userSlice';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const user = useSelector((state: RootState) => state.user)
   const [isMounted, setIsMounted] = useState(false)
+  const dispatch: AppDispatch = useDispatch()
 
   React.useEffect(() => {
     if (!isMounted) {
@@ -22,6 +24,8 @@ export default function TabLayout() {
     } else {
       if (!user.auth?.access) {
         return router.push('/login')
+      } else {
+        dispatch(userDetails())
       }
     }
   }, [isMounted, user.auth?.access]);
@@ -35,6 +39,9 @@ export default function TabLayout() {
 
   //   }
   // }
+
+  if (!isMounted) return <View></View>
+
   return (
     <Tabs
       screenOptions={{
@@ -53,15 +60,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Chat',
+          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="chat" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="person" color={color} />,
         }}
       />
     </Tabs>

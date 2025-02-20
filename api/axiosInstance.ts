@@ -1,33 +1,38 @@
 import CONFIG from "@/config/config";
+import { getTokens } from "@/utils/secureStore";
 import urlUtils from "@/utils/url.utils";
 import axios, { AxiosResponse } from "axios";
 
 let header = {};
-if (
-  typeof localStorage !== "undefined" &&
-  localStorage.getItem("authentication")
-) {
-  const tokenString: string | null = localStorage.getItem("authentication");
-  if (tokenString) {
-    header = {
-      authorization: "Bearer " + JSON.parse(tokenString).token,
-      // 'Content-Type': 'multipart/form-data',
-    };
-  }
+const tokens = getTokens();
+if (tokens?.access) {
+  // const tokenString: string | null = localStorage.getItem("authentication");
+  // if (tokenString) {
+  //   header = {
+  //     authorization: "Bearer " + JSON.parse(tokenString).token,
+  //     // 'Content-Type': 'multipart/form-data',
+  //   };
+  // }
+  header = {
+    authorization: "Bearer " + tokens.access,
+    // 'Content-Type': 'multipart/form-data',
+  };
 }
+
 
 // axiosInstance
 export const axiosInstance = axios.create({
   baseURL: CONFIG.API_URL,
   headers: header,
-  timeout: 2 * 60 * 1000,
 });
+
 
 export class CrudOperations {
   private api: string;
   constructor(api: string) {
     this.api = api;
   }
+  
   get = async (query: string = "") => {
     try {
       const response: AxiosResponse<any> = await axiosInstance.get(
