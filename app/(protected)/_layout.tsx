@@ -1,5 +1,5 @@
 import { router, Stack, Tabs } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Platform, Text, View } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
@@ -8,13 +8,24 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SecureStore from 'expo-secure-store';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const user = useSelector((state: RootState) => state.user)
+  const [isMounted, setIsMounted] = useState(false)
 
-  // React.useEffect(() => {
-  //   checkAuth()
-  // }, [checkAuth]);
+  React.useEffect(() => {
+    if (!isMounted) {
+      setIsMounted(true)
+    } else {
+      if (!user.auth?.access) {
+        return router.push('/login')
+      }
+    }
+  }, [isMounted, user.auth?.access]);
+
 
   // async function checkAuth() {
   //   try {

@@ -78,7 +78,7 @@ export default function Signup() {
             )}
           />
           <Button mode="contained" onPress={handleSubmit(onSubmit)}>
-            Login
+            Signup
           </Button>
           <Text style={{paddingLeft:10}}>Alredy Have An Account ? <Link style={{ color: 'blue' }} href={'/login'}>Login</Link></Text>
         </Card.Content>
