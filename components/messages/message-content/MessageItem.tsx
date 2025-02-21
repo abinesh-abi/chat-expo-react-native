@@ -11,9 +11,9 @@ export default function MessageItem({ message }: Props) {
   return (
     <View style={[styles.messageContainer, ownMessage ? styles.ownMessage : styles.othersMessage]} >
       <Avatar.Text size={15} label="A" style={styles.avatar} />
-      <View style={[styles.card, ownMessage ? styles.ownCard : styles.othrersCard]}>
+      <Card style={[styles.card, ownMessage ? styles.ownCard : styles.othrersCard]}>
         <Text>MessageItemss Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum, quae? Assumenda et sint natus consectetur, numquam placeat optio? Esse aspernatur consequatur ab? Sequi qui provident dicta numquam placeat sit maiores.</Text>
-      </View>
+      </Card>
     </View>
   )
 }
