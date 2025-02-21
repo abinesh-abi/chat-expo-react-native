@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Avatar, Card, MD3Colors, Text } from 'react-native-paper'
+import { Avatar, Card, MD3Colors, MD3DarkTheme, MD3LightTheme, Text } from 'react-native-paper'
 
 type Props = {
   message: number
@@ -31,15 +31,17 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row-reverse'
   },
-  ownCard: { backgroundColor: MD3Colors.secondary80 },
-  othrersCard: {  },
+  ownCard: {
+    // backgroundColor: MD3Colors.secondary80 
+  },
+  othrersCard: {},
   avatar: { marginTop: 5 },
   card: {
     maxWidth: '80%',
     marginBottom: 5,
     padding: 5,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     borderRadius: 10,
     shadowColor: 'black',
     shadowOffset: {
