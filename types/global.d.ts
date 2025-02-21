@@ -1,3 +1,4 @@
+export type Theme = "dark" | "light";
 // export type ApiResponse<T> = {
 //   count: number;
 //   next: string | null;
@@ -23,4 +24,3 @@
 //   error: string | null;
 //   data: T;
 // };
-

@@ -1,4 +1,3 @@
-import { ThemedMaterialIcon } from '@/components/common/themedItems/ThemedIcon'
 import DarkLightToggle from '@/components/dark-lite-toggl/DarkLightToggle'
 import { RootState } from '@/store'
 import { MaterialIcons } from '@expo/vector-icons'

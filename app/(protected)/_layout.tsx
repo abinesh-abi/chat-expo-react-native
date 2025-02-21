@@ -13,7 +13,7 @@ import { userDetails } from '@/store/features/userSlice';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const global = useSelector((state: RootState) => state.global)
   const user = useSelector((state: RootState) => state.user)
   const [isMounted, setIsMounted] = useState(false)
   const dispatch: AppDispatch = useDispatch()
@@ -45,7 +45,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[global.theme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
