@@ -1,28 +1,36 @@
-import DarkLightToggle from '@/components/dark-lite-toggl/DarkLightToggle'
-import { RootState } from '@/store'
-import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
-import { View } from 'react-native'
-import { Card, Text } from 'react-native-paper'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useSelector } from 'react-redux'
+import { BottomNavigation, Text } from 'react-native-paper'
+import Chat from './(tabs)/index';
+import Profile from './(tabs)/profile';
+import { BaseRoute } from 'react-native-paper/lib/typescript/components/BottomNavigation/BottomNavigation';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+
 
 export default function Index() {
-    const user = useSelector((state: RootState) => state.user)
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState<BaseRoute[]>([
+        { key: 'chat', title: 'Chat', focusedIcon: 'chat-bubble', unfocusedIcon: 'chat-bubble-outline' },
+        { key: 'profile', title: 'Profile', focusedIcon: 'person', unfocusedIcon: 'person-outline' },
+    ]);
+
+    const renderScene = BottomNavigation.SceneMap({
+        chat: Chat,
+        profile: Profile,
+    });
+
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <Card style={{ height: '100%' }}>
-                <Card.Title
-                    title='Chat App'
-                    titleStyle={{ fontSize: 25 }}
-                    subtitle={`Welcome ${user.user?.username}`}
-                    right={() => <DarkLightToggle />}
+        <BottomNavigation
+            navigationState={{ index, routes }}
+            onIndexChange={setIndex}
+            renderScene={renderScene}
+            renderIcon={({ route, focused, color }) => {
+                console.log(route, focused, color)
+                return <MaterialIcons
+                    size={28}
+                    style={{ color }}
+                    name={ focused? route.focusedIcon:route.unfocusedIcon as keyof typeof MaterialIcons['name'] | any}
                 />
-                <Card.Content>
-                    <Text>Content is in safe area.</Text>
-                </Card.Content>
-                <Text>Content is in safe area.</Text>
-            </Card>
-        </SafeAreaView>
-    )
+            }}
+        />
+    );
 }

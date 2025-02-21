@@ -1,22 +1,16 @@
-import { router, Stack, Tabs } from 'expo-router';
-import React, { useState } from 'react';
-import { Button, Platform, Text, View } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import * as SecureStore from 'expo-secure-store';
-import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { userDetails } from '@/store/features/userSlice';
-import { MaterialIcons } from '@expo/vector-icons';
+import { router, Stack } from 'expo-router';
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import 'react-native-reanimated';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function TabLayout() {
-  const global = useSelector((state: RootState) => state.global)
+export default function RootLayout() {
   const user = useSelector((state: RootState) => state.user)
-  const [isMounted, setIsMounted] = useState(false)
   const dispatch: AppDispatch = useDispatch()
+
+  const [isMounted, setIsMounted] = useState(false)
 
   React.useEffect(() => {
     if (!isMounted) {
@@ -42,35 +36,12 @@ export default function TabLayout() {
 
   if (!isMounted) return <View></View>
 
+
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[global.theme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Chat',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="chat" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="person" color={color} />,
-        }}
-      />
-    </Tabs>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="chat-view/[chatId]" options={{ headerShown: false }} />
+      <Stack.Screen name="+not-found" />
+    </Stack>
   );
 }

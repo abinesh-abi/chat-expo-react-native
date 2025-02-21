@@ -12,24 +12,30 @@ import { Theme } from "@/types/global";
 
 type InitialStateType = {
   theme: Theme;
+  search: string;
 };
 
 const initialState: InitialStateType = {
   theme: SecureStore.getItem("THEME") === "light" ? "light" : "dark",
+  search: "",
 };
 
 const globalSlice = createSlice({
   name: "global",
   initialState,
   reducers: {
-    // set user
+    // set theme
     setTheme: (state, action: PayloadAction<Theme>) => {
       SecureStore.setItem("THEME", action.payload);
       state.theme = action.payload;
     },
+    // set search
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+    },
   },
 });
 
-export const { setTheme } = globalSlice.actions;
+export const { setTheme, setSearch } = globalSlice.actions;
 
 export default globalSlice.reducer;
