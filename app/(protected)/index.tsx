@@ -24,7 +24,6 @@ export default function Index() {
             onIndexChange={setIndex}
             renderScene={renderScene}
             renderIcon={({ route, focused, color }) => {
-                console.log(route, focused, color)
                 return <MaterialIcons
                     size={28}
                     style={{ color }}

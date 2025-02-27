@@ -35,6 +35,7 @@ export const userLogin = createAsyncThunk(
       } else return null;
     } catch (error) {
       const err = error as AxiosError;
+      console.log(err)
       if (err.response?.data) {
         throw thunkApi.rejectWithValue(err.response.data);
       }
@@ -48,6 +49,7 @@ export const userDetails = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const response: User = await getUserDetails();
+      console.log(response)
       return response;
     } catch (error) {
       const err = error as AxiosError;
