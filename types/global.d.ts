@@ -39,3 +39,12 @@ export type Chat = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Message = {
+  _id: string;
+  sender: string;
+  chatId: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+};

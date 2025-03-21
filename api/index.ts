@@ -7,3 +7,4 @@ export const getUserDetails = new CrudOperations("/user/user-details").get;
 
 /** chat */
 export const getChatList = new CrudOperations("/chat/list").get;
+export const retrieveChatMessages = new CrudOperations("/message/msg-by-chat").retrieve;

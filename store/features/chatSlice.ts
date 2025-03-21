@@ -5,10 +5,12 @@ import { AxiosError } from "axios";
 
 type InitialStateType = {
   chatList: ApiResponse<Chat>;
+  selectedChat: Chat | null;
 };
 
 const initialState: InitialStateType = {
   chatList: { count: 0, data: [] },
+  selectedChat: null,
 };
 
 export const fetchChatList = createAsyncThunk(
@@ -31,10 +33,10 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    // set search
-    // setSearch: (state, action: PayloadAction<string>) => {
-    //   state.search = action.payload;
-    // },
+    // set selected Chat
+    setSelectedChat: (state, action: PayloadAction<Chat>) => {
+      state.selectedChat = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchChatList.fulfilled, (state, action) => {
@@ -43,6 +45,6 @@ const chatSlice = createSlice({
   },
 });
 
-export const {} = chatSlice.actions;
+export const {setSelectedChat} = chatSlice.actions;
 
 export default chatSlice.reducer;

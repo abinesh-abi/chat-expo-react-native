@@ -1,11 +1,12 @@
-import { RootState } from '@/store'
+import { AppDispatch, RootState } from '@/store'
+import { setSelectedChat } from '@/store/features/chatSlice'
 import { Chat } from '@/types/global'
 import { useRoute } from '@react-navigation/native'
 import { router, useNavigation } from 'expo-router'
 import React from 'react'
 import { View } from 'react-native'
 import { Avatar, Card, Text } from 'react-native-paper'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 type Props = {
@@ -14,12 +15,14 @@ type Props = {
 
 export default function ChatItems({ chat }: Props) {
   const user = useSelector((state: RootState) => state.user)
+  const dispatch: AppDispatch = useDispatch()
 
   const otherUser = chat?.userDetails?.find(val => val._id !== user.user?._id)
   const icon = otherUser?.username[0].toLocaleUpperCase() ||'A'
 
   function handleView() {
-    router.push({ pathname: '/chat-view/[chatId]', params: { chatId: 1 } })
+    dispatch(setSelectedChat(chat))
+    router.push({ pathname: '/chat-view/[chatId]', params: { chatId: chat._id } })
   }
 
   return (
