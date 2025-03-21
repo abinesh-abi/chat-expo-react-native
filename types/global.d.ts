@@ -48,3 +48,9 @@ export type Message = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CreateMessageBody = {
+  chatId: string;
+  sender: string;
+  content: string;
+};

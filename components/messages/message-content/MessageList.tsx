@@ -1,40 +1,38 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { ScrollView } from 'react-native'
 import MessageItem from './MessageItem'
 import { useLocalSearchParams } from 'expo-router';
-import { retrieveChatMessages } from '@/api';
-import { ApiResponse, Message } from '@/types/global';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { clearChatMessages, fetchChatMessages } from '@/store/features/chatSlice';
 
 export default function MessageList() {
   const scrollRef = useRef<ScrollView>(null);
   const { chatId } = useLocalSearchParams();
+  const dispatch: AppDispatch = useDispatch()
+  const chat = useSelector((state: RootState) => state.chat)
 
-  const [fetchedMessages, setFetchedMessages] = useState<ApiResponse<Message>>()
 
   useEffect(() => {
     scrollRef.current?.scrollToEnd()
   }, [])
 
   useEffect(() => {
-    fetchData()
+    if (chatId && typeof chatId === 'string') {
+      dispatch(fetchChatMessages({ chatId }))
+    }
+    return function () {
+      dispatch(clearChatMessages())
+    }
   }, [chatId])
 
-  async function fetchData() {
-    try {
-      if (chatId && typeof chatId === 'string') {
-        const response = await retrieveChatMessages(chatId)
-        setFetchedMessages(response)
-      }
-    } catch (error) {
 
-    }
-  }
 
 
   return (
     <ScrollView ref={scrollRef} style={{ height: '100%', paddingVertical: 10, paddingHorizontal: 5 }}>
       {
-        fetchedMessages?.data
+        chat.chatMessages
           .map((message, key) => {
             return <MessageItem key={key} message={message} />
           })
